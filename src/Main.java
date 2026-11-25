@@ -315,7 +315,7 @@ public class Main {
 
     private static void printTimingReport(Order order) {
         int steps = order.getPlannedRoute().getTotalDistance();
-        int secondsPerStep = 30;
+        int secondsPerStep = 3;
         int totalSeconds = steps * secondsPerStep;
         int minutes = totalSeconds / 60;
         int remSeconds = totalSeconds % 60;
