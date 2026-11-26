@@ -87,11 +87,8 @@ public class Main {
         System.out.println("Processing Task #1: Order " + order101.getOrderId());
         System.out.println("==================================================================");
         if (orderManager.submitOrder(order101)) {
-            Position startPos = order101.getAssignedPicker().getCurrentPosition();
             printOrderRouteSummary(order101);
-            List<Position> fullRoute = order101.getPlannedRoute().getFullRoute();
-            Position endPos = fullRoute.isEmpty() ? startPos : fullRoute.get(fullRoute.size() - 1);
-            warehouse.printMapWithRoute(fullRoute, startPos, endPos);
+            printOrderMapRoute(warehouse, order101);
             printTimingReport(order101);
 
             System.out.println("\n>>> SIMULATING WAREHOUSE PICKING WORKFLOW:");
@@ -227,6 +224,7 @@ public class Main {
                         if (orderManager.submitOrder(newOrder)) {
                             nextOrderNum++;
                             printOrderRouteSummary(newOrder);
+                            printOrderMapRoute(warehouse, newOrder);
                             printTimingReport(newOrder);
                         }
                         break;
@@ -311,6 +309,13 @@ public class Main {
         System.out.println("  Total Movement Steps across all " + route.getVisitingOrder().size()
             + " items: " + route.getTotalDistance() + " steps");
         System.out.println("--------------------------------------------------------------------");
+    }
+
+    private static void printOrderMapRoute(Warehouse warehouse, Order order) {
+        Position startPos = order.getAssignedPicker().getCurrentPosition();
+        List<Position> fullRoute = order.getPlannedRoute().getFullRoute();
+        Position endPos = fullRoute.isEmpty() ? startPos : fullRoute.get(fullRoute.size() - 1);
+        warehouse.printMapWithRoute(fullRoute, startPos, endPos);
     }
 
     private static void printTimingReport(Order order) {
